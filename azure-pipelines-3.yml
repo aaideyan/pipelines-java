@@ -21,6 +21,8 @@ pool:
 #    spotBugsAnalysis: false
 
 steps:
+- script: chmod +x gradlew
+  displayName: 'Make Gradlew Executable'
 - task: Gradle@4
   inputs:
     workingDirectory: ''
