@@ -9,13 +9,26 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+#steps:
+#- task: Gradle@4 
+#  inputs:
+#    gradleWrapperFile: 'gradlew'
+#    tasks: 'build'
+#    publishJUnitResults: true
+#    testResultsFiles: '**/TEST-*.xml'
+#    javaHomeOption: 'JDKVersion'
+#    sonarQubeRunAnalysis: false
+#    spotBugsAnalysis: false
+
 steps:
-- task: Gradle@4
+- task: Gradle@2
   inputs:
+    workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     tasks: 'build'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
-    sonarQubeRunAnalysis: false
-    spotBugsAnalysis: false
+    gradleOptions: '-Xmx3072m'
+    jdkVersionOption: 'default'
+    jdkArchitectureOption: 'x64'
