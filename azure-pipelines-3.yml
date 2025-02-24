@@ -21,7 +21,7 @@ pool:
 #    spotBugsAnalysis: false
 
 steps:
-- task: Gradle@2
+- task: Gradle@4
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
