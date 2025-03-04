@@ -31,17 +31,15 @@ steps:
 - script: chmod +x gradlew
   displayName: 'Make Gradlew Executable'
 - task: Gradle@4
+  displayName: 'Build Java Project'
   inputs:
     gradleWrapperFile: 'gradlew'
     tasks: 'build'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'  # ✅ Ensure correct JDK version
-    sonarQubeRunAnalysis: true
-    sqGradlePluginVersionChoice: 'specify'
-    sonarQubeGradlePluginVersion: '2.6.1'
-    spotBugsAnalysis: false
+    jdkVersionOption: '1.17'
+    sonarQubeRunAnalysis: false  # 🔴 Temporarily disable SonarQube
 
 - task: SonarQubeAnalyze@7
   displayName: 'Run SonarQube Analysis'
