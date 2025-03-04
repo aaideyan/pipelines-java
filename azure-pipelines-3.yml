@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main  # Enables Continuous Integration for the main branch
+      - main  # ✅ Enables CI on the main branch
 
 pool:
   vmImage: ubuntu-latest
@@ -17,9 +17,10 @@ steps:
     jdkSourceOption: 'PreInstalled'
 
 - task: SonarQubePrepare@7
+  displayName: 'Prepare analysis on SonarQube Server'
   inputs:
     SonarQube: 'SonarQube_Gradle_Feb2025'
-    scannerMode: 'Gradle'  # Use 'Gradle' instead of 'other'
+    scannerMode: 'Gradle'  # ✅ Ensure this is correctly set
     extraProperties: |
       sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach
       sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
@@ -32,7 +33,7 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'  # Ensure correct JDK version
+    jdkVersionOption: '1.17'  # ✅ Ensure correct JDK version
     sonarQubeRunAnalysis: true
     sqGradlePluginVersionChoice: 'specify'
     sonarQubeGradlePluginVersion: '2.6.1'
@@ -42,5 +43,6 @@ steps:
   displayName: 'Run SonarQube Analysis'
 
 - task: SonarQubePublish@7
+  displayName: 'Publish SonarQube Results'
   inputs:
     pollingTimeoutSec: '300'
