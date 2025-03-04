@@ -22,7 +22,7 @@ steps:
     SonarQube: 'SonarQube_Gradle_Feb2025'
     scannerMode: 'Gradle'  # ✅ Ensure this is correctly set
     extraProperties: |
-      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach
+      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach_Feb2025-Java-Gradle-CI-Using-UI-Approach_27a4f7d9-177c-4d53-bed9-35cd910fd0bd
       sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
       sonar.exclusions=**/*.bin
 
