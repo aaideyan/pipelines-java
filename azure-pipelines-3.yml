@@ -1,26 +1,15 @@
 # Gradle
+- task: SonarQubePublish@7
+  inputs:
+    pollingTimeoutSec: '300'
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
-trigger:
-- main
-
 pool:
   vmImage: ubuntu-latest
 
-#steps:
-#- task: Gradle@4 
-#  inputs:
-#    gradleWrapperFile: 'gradlew'
-#    tasks: 'build'
-#    publishJUnitResults: true
-#    testResultsFiles: '**/TEST-*.xml'
-#    javaHomeOption: 'JDKVersion'
-#    sonarQubeRunAnalysis: false
-#    spotBugsAnalysis: false
-
-steps:
+  steps:
 - script: chmod +x gradlew
   displayName: 'Make Gradlew Executable'
 - task: Gradle@4
@@ -34,3 +23,37 @@ steps:
     gradleOptions: '-Xmx3072m'
     jdkVersionOption: 'default'
     jdkArchitectureOption: 'x64'
+
+- task: SonarQubePrepare@7
+  inputs:
+    SonarQube: 'SonarQube_Gradle_Feb2025'
+    scannerMode: 'other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner,
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach_Feb2025-Java-Gradle-CI-Using-UI-Approach_27a4f7d9-177c-4d53-bed9-35cd910fd0bd
+      sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
+
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+    - task: Gradle@4
+      inputs:
+        gradleWrapperFile: 'gradlew'
+        tasks: 'build'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        sonarQubeRunAnalysis: true
+        sqGradlePluginVersionChoice: 'specify'
+        sonarQubeGradlePluginVersion: '2.6.1'
+        spotBugsAnalysis: false
+
+     trigger:
+      branches:
+      include:
+      - main
