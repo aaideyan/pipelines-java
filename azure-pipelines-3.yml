@@ -1,39 +1,14 @@
-# Gradle
-- task: SonarQubePublish@7
-  inputs:
-    pollingTimeoutSec: '300'
-# Build your Java project and run tests with Gradle using a Gradle wrapper script.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+trigger:
+  branches:
+    include:
+      - main  # Enables Continuous Integration for the main branch
 
 pool:
   vmImage: ubuntu-latest
 
-  steps:
+steps:
 - script: chmod +x gradlew
   displayName: 'Make Gradlew Executable'
-- task: Gradle@4
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    tasks: 'build'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    gradleOptions: '-Xmx3072m'
-    jdkVersionOption: 'default'
-    jdkArchitectureOption: 'x64'
-
-- task: SonarQubePrepare@7
-  inputs:
-    SonarQube: 'SonarQube_Gradle_Feb2025'
-    scannerMode: 'other'
-    extraProperties: |
-      # Additional properties that will be passed to the scanner,
-      # Put one key=value per line, example:
-      # sonar.exclusions=**/*.bin
-      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach_Feb2025-Java-Gradle-CI-Using-UI-Approach_27a4f7d9-177c-4d53-bed9-35cd910fd0bd
-      sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
 
 - task: JavaToolInstaller@1
   inputs:
@@ -41,19 +16,31 @@ pool:
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
 
-    - task: Gradle@4
-      inputs:
-        gradleWrapperFile: 'gradlew'
-        tasks: 'build'
-        publishJUnitResults: true
-        testResultsFiles: '**/TEST-*.xml'
-        javaHomeOption: 'JDKVersion'
-        sonarQubeRunAnalysis: true
-        sqGradlePluginVersionChoice: 'specify'
-        sonarQubeGradlePluginVersion: '2.6.1'
-        spotBugsAnalysis: false
+- task: SonarQubePrepare@7
+  inputs:
+    SonarQube: 'SonarQube_Gradle_Feb2025'
+    scannerMode: 'Gradle'  # Use 'Gradle' instead of 'other'
+    extraProperties: |
+      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach
+      sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
+      sonar.exclusions=**/*.bin
 
-     trigger:
-      branches:
-      include:
-      - main
+- task: Gradle@4
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'build'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'  # Ensure correct JDK version
+    sonarQubeRunAnalysis: true
+    sqGradlePluginVersionChoice: 'specify'
+    sonarQubeGradlePluginVersion: '2.6.1'
+    spotBugsAnalysis: false
+
+- task: SonarQubeAnalyze@7
+  displayName: 'Run SonarQube Analysis'
+
+- task: SonarQubePublish@7
+  inputs:
+    pollingTimeoutSec: '300'
