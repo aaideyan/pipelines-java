@@ -9,22 +9,20 @@ pool:
 steps:
 - script: chmod +x gradlew
   displayName: 'Make Gradlew Executable'
+  condition: 
+  continueOnError:
+
+# Additional properties that will be passed to the scanner,
+# Put one key=value per line, example:
+# sonar.exclusions=**/*.bin
+sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach_27a4f7d9-177c-4d53-bed9-35cd910fd0bd
+sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
 
 - task: JavaToolInstaller@1
   inputs:
     versionSpec: '17'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
-
-- task: SonarQubePrepare@7
-  displayName: 'Prepare analysis on SonarQube Server'
-  inputs:
-    SonarQube: 'SonarQube_Gradle_Feb2025'
-    scannerMode: 'Gradle'  # ✅ Ensure this is correctly set
-    extraProperties: |
-      sonar.projectKey=Feb2025-Java-Gradle-CI-Using-UI-Approach_Feb2025-Java-Gradle-CI-Using-UI-Approach_27a4f7d9-177c-4d53-bed9-35cd910fd0bd
-      sonar.projectName=Feb2025-Java-Gradle-CI-Using-UI-Approach
-      sonar.exclusions=**/*.bin
 
 - task: Gradle@4
   inputs:
