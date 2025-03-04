@@ -38,8 +38,11 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
-    sonarQubeRunAnalysis: false  # 🔴 Temporarily disable SonarQube
+    jdkVersionOption: '1.17'  # ✅ Ensure correct JDK version
+    sonarQubeRunAnalysis: true
+    sqGradlePluginVersionChoice: 'specify'
+    sonarQubeGradlePluginVersion: '6.0.1.5171'
+    spotBugsAnalysis: false
 
 - task: SonarQubeAnalyze@7
   displayName: 'Run SonarQube Analysis'
